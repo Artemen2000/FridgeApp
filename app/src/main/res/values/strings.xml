@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">fridgeapp1</string>
+    <string name="add_new_item">Add new food</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="food_name">Food Name</string>
+    <string name="expires_at">Expires at</string>
+    <string name="enter_food_name">Enter food name</string>
+    <string name="expirement_date">Expirement date</string>
+    <string name="delete">Delete</string>
+    <string name="confirm_creating">Confirm creating</string>
+    <string name="days">days</string>
+</resources>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">fridgeapp1</string>
+    <string name="add_new_item">Добавить новый продукт</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="food_name">Продукт</string>
+    <string name="expires_at">Истекает</string>
+    <string name="enter_food_name">Введите название продукта</string>
+    <string name="expirement_date">Срок годности, дата</string>
+    <string name="delete">Удалить</string>
+    <string name="confirm_creating">Подтвердить добавление</string>
+    <string name="days">Дней</string>
+</resources>
