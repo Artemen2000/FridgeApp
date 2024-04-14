@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    android:padding="@dimen/margin">
+    android:padding="@dimen/margin"
+    android:focusableInTouchMode="true">
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/input_data_food_name_layout"
@@ -55,8 +56,10 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/input_data_expire_days"
             android:layout_width="match_parent"
+            android:inputType="number"
             android:layout_height="wrap_content"
             android:minWidth="48dp"
+            android:maxLength="9"
             tools:text="157" />
     </com.google.android.material.textfield.TextInputLayout>
 

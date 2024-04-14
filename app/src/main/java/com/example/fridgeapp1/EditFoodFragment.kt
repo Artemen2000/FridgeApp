@@ -36,7 +36,13 @@ class EditFoodFragment : Fragment() {
     lateinit var observingFood: LiveData<FoodItem>
 
     //This FoodItem is used for filling fields via LiveData
-    lateinit var currentFood: MutableLiveData<FoodItem>
+    //lateinit var currentFood: MutableLiveData<FoodItem>
+    val currentName: MutableLiveData<String> = MutableLiveData()
+    val currentDate: MutableLiveData<Long> = MutableLiveData()
+
+    var no_listening = false
+    var editingDays = false
+    var editingDate = false
 
     private var _binding: FragmentEditFoodBinding? = null
     private val binding get() = _binding!!
@@ -56,6 +62,7 @@ class EditFoodFragment : Fragment() {
 
         binding.inputDataExpireDate.isEnabled = false
         binding.inputDataExpireDateLayout.setEndIconOnClickListener {
+            editingDays = false
             datePicker.show(this.parentFragmentManager, "Kek")
         }
 
@@ -76,59 +83,76 @@ class EditFoodFragment : Fragment() {
         viewModel.hello()
         Log.d("goida", "Collecting data from widgets")
         val date = Calendar.getInstance()
-        date.timeInMillis = datePicker.selection!!
+        date.timeInMillis = currentDate.value!!
         Log.d("goida", "Calling addNewFood from viemModel...")
         viewModel.addNewFood(
-            binding.inputDataFoodName.text.toString(),
+            currentName.value!!,
             date.time)
     }
 
     private fun bind(){
-        val item = currentFood.value ?: return
-        val cal = Calendar.getInstance()
-        cal.timeInMillis = item?.expiresAt!!
-        val now = Calendar.getInstance().timeInMillis
-        val days = cal.timeInMillis - now
-        val days1 = java.util.concurrent.TimeUnit.MILLISECONDS.toDays(days)
-        binding.inputDataFoodName.setText(item.name)
+        if (currentDate.value != null && currentName.value != null) {
+            val cal = Calendar.getInstance()
+            cal.timeInMillis = currentDate.value!!
+            val now = Calendar.getInstance().timeInMillis
+            val days = cal.timeInMillis - now
+            val days1 = java.util.concurrent.TimeUnit.MILLISECONDS.toDays(days)
+            binding.inputDataFoodName.setText(currentName.value)
+
+            binding.inputDataExpireDays.setText(days1.toString())
+
+            binding.inputDataExpireDate.text =
+                SpannableStringBuilder(getDateInstance().format(cal.time))
+            datePicker = MaterialDatePicker.Builder.datePicker()
+                .setTitleText("Select expirement date")
+                .setInputMode(MaterialDatePicker.INPUT_MODE_CALENDAR)
+                .setSelection(cal.timeInMillis)
+                .build()
+
+
+
+
+        }
+
         binding.inputDataFoodName.doOnTextChanged { text, start, before, count ->
-            currentFood.value?.name = text.toString()
+            currentName.value = text.toString()
         }
-        binding.inputDataExpireDays.setText(days1.toString())
+
+        binding.inputDataExpireDays.setOnFocusChangeListener { v, hasFocus ->
+            editingDays = hasFocus }
+
+        binding.inputDataExpireDays.setOnClickListener {
+            editingDays = true
+        }
+
         binding.inputDataExpireDays.doOnTextChanged { text, start, before, count ->
-            val cal_new = Calendar.getInstance()
-            cal_new.add(Calendar.DAY_OF_MONTH, binding.inputDataExpireDays.text.toString().toInt())
-            currentFood.value?.expiresAt = cal_new.timeInMillis
+            if (editingDays) {
+                val cal_new = Calendar.getInstance()
+                val days = if (text.toString().equals("")) 0 else text.toString().toInt()
+                cal_new.add(Calendar.DAY_OF_MONTH, days)
+                currentDate.value = cal_new.timeInMillis
+            }
         }
 
-        binding.inputDataExpireDate.text = SpannableStringBuilder(getDateInstance().format(cal.time))
-        datePicker = MaterialDatePicker.Builder.datePicker()
-            .setTitleText("Select expirement date")
-            .setInputMode(MaterialDatePicker.INPUT_MODE_CALENDAR)
-            .setSelection(cal.timeInMillis)
-            .build()
-
-        datePicker.addOnPositiveButtonClickListener {
-                selection: Long? ->
+        datePicker.addOnPositiveButtonClickListener { selection: Long? ->
             Log.d("goida", "DatePicker on positive Listener")
             val date = Calendar.getInstance()
             date.timeInMillis = selection!!
-            binding.inputDataExpireDate.text =
-                SpannableStringBuilder(getDateInstance().format(date.time))
+            currentDate.value = date.timeInMillis
+            //binding.inputDataExpireDate.text =
+                //SpannableStringBuilder(getDateInstance().format(date.time))
         }
 
-        binding.btnAccept.setOnClickListener {
-            updateFood()
-            this.findNavController().navigateUp()
-        }
+
     }
 
    private fun updateFood() {
        val date = Calendar.getInstance()
-       date.timeInMillis = datePicker.selection!!
+       //date.timeInMillis = datePicker.selection!!
+       date.timeInMillis = currentDate.value!!
 
        viewModel.updateFood(this.navigationArgs.itemId,
-           this.binding.inputDataFoodName.text.toString(),
+           currentName.value!!,
            date.time)
        val action = EditFoodFragmentDirections.actionEditFoodFragmentToFoodListFragment()
        findNavController().navigate(action)
@@ -136,17 +160,23 @@ class EditFoodFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?){
         super.onViewCreated(view, savedInstanceState)
-        currentFood = MutableLiveData()
+        //currentFood = MutableLiveData()
 
 
         val id = navigationArgs.itemId
 
         if (id > 0){
             val item = viewModel.retrieveItem(id)
-            currentFood.value = viewModel.retrieveItem(id).value
+            //currentFood.value = viewModel.retrieveItem(id).value
+            if (item.value != null) {
+                currentName.value = item.value?.name
+                currentDate.value = item.value?.expiresAt
+            }
             viewModel.retrieveItem(id).observe(this.viewLifecycleOwner) { selectedItem ->
                 //observingFood.value = selectedItem
-                currentFood.value = selectedItem
+                //currentFood.value = selectedItem
+                currentName.value = selectedItem.name
+                currentDate.value = selectedItem.expiresAt
                 binding.btnDelete.visibility = Button.VISIBLE
                 binding.btnDelete.setOnClickListener {
                     MaterialAlertDialogBuilder(requireContext())
@@ -158,10 +188,17 @@ class EditFoodFragment : Fragment() {
                         }
                         .show()
                 }
+
+                binding.btnAccept.setOnClickListener {
+                    updateFood()
+                    this.findNavController().navigateUp()
+                }
             }
         }
         else {
-            currentFood.value = FoodItem(name = "", expiresAt = Calendar.getInstance().timeInMillis)
+            //currentFood.value = FoodItem(name = "", expiresAt = Calendar.getInstance().timeInMillis)
+            currentName.value = ""
+            currentDate.value = Calendar.getInstance().timeInMillis
             binding.btnDelete.visibility = Button.GONE
             binding.btnAccept.setOnClickListener {
                 addNewFoodItem()
@@ -170,18 +207,34 @@ class EditFoodFragment : Fragment() {
         }
 
         //bind()
-        currentFood.observe(this.viewLifecycleOwner){
-            //При изменении currentFood
-            if (it == null) return@observe
-            bind()
+        bind()
+
+        currentDate.observe(this.viewLifecycleOwner){
             val cal = Calendar.getInstance()
-            cal.timeInMillis = it.expiresAt
+            cal.timeInMillis = it
             val now = Calendar.getInstance().timeInMillis
             val days = cal.timeInMillis - now
             val days1 = java.util.concurrent.TimeUnit.MILLISECONDS.toDays(days)
-            binding.inputDataExpireDate.text = SpannableStringBuilder(getDateInstance().format(cal.time))
-            binding.inputDataExpireDays.setText(days1.toString())
-            binding.inputDataFoodName.setText(it.name)
+            if (!editingDate)
+                binding.inputDataExpireDate.text = SpannableStringBuilder(getDateInstance().format(cal.time))
+            if (!editingDays)
+                binding.inputDataExpireDays.setText(days1.toString())
+            binding.inputDataFoodName.setText(currentName.value)
+
+
+            datePicker = MaterialDatePicker.Builder.datePicker()
+                .setTitleText("Select expirement date")
+                .setInputMode(MaterialDatePicker.INPUT_MODE_CALENDAR)
+                .setSelection(it)
+                .build()
+            datePicker.addOnPositiveButtonClickListener {
+                    selection: Long? ->
+                Log.d("goida", "DatePicker on positive Listener")
+                val date = Calendar.getInstance()
+                date.timeInMillis = selection!!
+                currentDate.value = date.timeInMillis
+            }
+
         }
 
         binding.inputDataExpireDate.setOnClickListener {
