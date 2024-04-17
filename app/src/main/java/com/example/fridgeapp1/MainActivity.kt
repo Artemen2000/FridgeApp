@@ -57,7 +57,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         val periodReq = PeriodicWorkRequestBuilder<MyPeriodWorker>(10, TimeUnit.SECONDS)
             .build()
         workManager.enqueue(periodReq)
-        Log.d("goida", "Enqueued")
     }
 
     fun stopWork(){
@@ -73,7 +72,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         //workManager.enqueue(periodReq)
         val a = workManager.getWorkInfoById(periodReq.id)
         workManager.cancelAllWork()
-        Log.d("goida", "Got work info")
     }
 }
 

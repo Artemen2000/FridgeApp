@@ -16,7 +16,6 @@ class MyPeriodWorker(val cont: Context, val params: WorkerParameters): Listenabl
         val service = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(10))
         val fut = service.submit(
             Callable<Result> {
-                Log.d("goida", "10 seconds passed!")
                 res
             }
         )

@@ -17,7 +17,6 @@ class FoodViewModel (private val foodDao: FoodDao, val selectedItem : FoodItem? 
     val allFood: LiveData<List<FoodItem>> = foodDao.getItems().asLiveData()
 
     fun hello() {
-        Log.d("goida", "Hello from viewModel")
     }
 
     fun isExpired(item:FoodItem, date: Date): Boolean {
@@ -76,7 +75,6 @@ class FoodViewModel (private val foodDao: FoodDao, val selectedItem : FoodItem? 
 
 class FoodViewModelFactory(private val foodDao:FoodDao) : ViewModelProvider.Factory{
     override fun <T: ViewModel> create(modelClass: Class<T>): T{
-        Log.d("goida", "Creating foodViewModel...")
         if (modelClass.isAssignableFrom(FoodViewModel::class.java)){
             @Suppress("UNCHECKED_CAST")
             return FoodViewModel(foodDao) as T

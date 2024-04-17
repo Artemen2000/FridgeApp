@@ -25,7 +25,6 @@ class MyWorker(val cont: Context, val params: WorkerParameters) : ListenableWork
         val service1 = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(10))
         val fut2 = service1.submit (
             Callable<Result> {
-                Log.d("goida", "five sec work done")
                 res
             }
         )
