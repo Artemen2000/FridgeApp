@@ -14,18 +14,19 @@ import java.time.Instant
 import java.util.Calendar
 
 @Entity
-class FoodItem (
+data class FoodItem(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     @ColumnInfo(name = "name")
     var name: String,
     @ColumnInfo(name = "expiresAt")
     var expiresAt: Long,
-    )
-
-fun FoodItem.getFormattedDate() : String
-{
-    val calendar : Calendar = Calendar.getInstance()
-    calendar.timeInMillis = expiresAt
-    return getDateInstance().format(calendar.time)
+) {
+    fun getFormattedDate(): String {
+        val calendar: Calendar = Calendar.getInstance()
+        calendar.timeInMillis = expiresAt
+        return getDateInstance().format(calendar.time)
+    }
 }
+
+

@@ -11,4 +11,8 @@
     <string name="delete">Удалить</string>
     <string name="confirm_creating">Подтвердить добавление</string>
     <string name="days">Дней</string>
+    <string name="datepicker_title">Выбрать срок окончания годности</string>
+    <string name="confirm_deleting_label">Удалить продукт из списка?</string>
+    <string name="confirm_deleting_cancel">Отмена</string>
+    <string name="confirm_deleting_accept">Принять</string>
 </resources>

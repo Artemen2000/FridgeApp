@@ -5,12 +5,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="@dimen/margin"
-    tools:context=".FoodListFragment">
+    android:layout_margin="0dp"
+    tools:context=".screen.food_list.FoodListFragment">
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/item_name"
-        android:layout_marginStart="@dimen/margin_between_elements"
+        android:layout_marginTop="@dimen/margin"
+        android:layout_marginStart="@dimen/margin"
         android:text="@string/food_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -21,7 +22,9 @@
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/item_price"
         android:layout_below="@+id/item_name"
+        android:layout_marginTop="@dimen/margin"
         android:layout_marginStart="@dimen/margin_between_elements"
+        android:layout_marginEnd="@dimen/margin"
         android:text="@string/expires_at"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -43,6 +46,11 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:scrollbars="vertical"
+        android:layout_marginTop="0dp"
+        android:layout_marginStart="@dimen/margin"
+        android:layout_marginEnd="@dimen/margin"
+        android:layout_marginBottom="@dimen/margin"
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/divider"
@@ -52,8 +60,8 @@
         android:id="@+id/floatingActionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/margin_between_elements"
-        android:layout_marginBottom="@dimen/margin_between_elements"
+        android:layout_marginEnd="@dimen/margin"
+        android:layout_marginBottom="@dimen/margin"
         android:contentDescription="@string/add_new_item"
         android:src="@android:drawable/ic_input_add"
         app:layout_constraintBottom_toBottomOf="parent"

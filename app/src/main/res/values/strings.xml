@@ -10,4 +10,8 @@
     <string name="delete">Delete</string>
     <string name="confirm_creating">Confirm creating</string>
     <string name="days">days</string>
+    <string name="datepicker_title">Select expiration date</string>
+    <string name="confirm_deleting_label">Delete food entry?</string>
+    <string name="confirm_deleting_cancel">Cancel</string>
+    <string name="confirm_deleting_accept">Accept</string>
 </resources>

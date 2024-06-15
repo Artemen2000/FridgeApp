@@ -7,6 +7,7 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:padding="@dimen/margin"
+    android:clipToPadding="false"
     android:focusableInTouchMode="true">
 
     <com.google.android.material.textfield.TextInputLayout
@@ -30,6 +31,7 @@
         android:hint="@string/expirement_date"
         app:endIconMode="custom"
         app:endIconDrawable="@android:drawable/ic_menu_day"
+        android:layout_marginEnd="@dimen/margin_between_elements"
         app:layout_constraintTop_toBottomOf="@id/input_data_food_name_layout"
         app:layout_constraintRight_toLeftOf="@id/input_data_expire_days_layout"
         app:layout_constraintLeft_toLeftOf="parent"

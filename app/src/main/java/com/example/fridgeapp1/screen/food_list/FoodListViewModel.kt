@@ -1,4 +1,4 @@
-package com.example.fridgeapp1
+package com.example.fridgeapp1.screen.food_list
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -8,16 +8,14 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.fridgeapp1.data.FoodDao
 import com.example.fridgeapp1.data.FoodItem
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.Date
 import java.util.Calendar
 
-class FoodViewModel (private val foodDao: FoodDao, val selectedItem : FoodItem? = null): ViewModel() {
+class FoodListViewModel (private val foodDao: FoodDao, var selectedItem : FoodItem? = null): ViewModel() {
 
     val allFood: LiveData<List<FoodItem>> = foodDao.getItems().asLiveData()
-
-    fun hello() {
-    }
 
     fun isExpired(item:FoodItem, date: Date): Boolean {
         return (item.expiresAt < date.time)
@@ -53,7 +51,7 @@ class FoodViewModel (private val foodDao: FoodDao, val selectedItem : FoodItem? 
 
     fun addNewFood(foodName: String, expiresAt: Date){
         val newFood = getNewFoodEntry(foodName, expiresAt)
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             foodDao.insert(newFood)
         }
     }
@@ -75,9 +73,9 @@ class FoodViewModel (private val foodDao: FoodDao, val selectedItem : FoodItem? 
 
 class FoodViewModelFactory(private val foodDao:FoodDao) : ViewModelProvider.Factory{
     override fun <T: ViewModel> create(modelClass: Class<T>): T{
-        if (modelClass.isAssignableFrom(FoodViewModel::class.java)){
+        if (modelClass.isAssignableFrom(FoodListViewModel::class.java)){
             @Suppress("UNCHECKED_CAST")
-            return FoodViewModel(foodDao) as T
+            return FoodListViewModel(foodDao) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }
