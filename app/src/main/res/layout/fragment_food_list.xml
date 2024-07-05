@@ -6,7 +6,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="0dp"
-    tools:context=".screen.food_list.FoodListFragment">
+    tools:context=".screen.food_list.FoodListFragment"
+    android:transitionGroup="true"
+    >
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/item_name"
@@ -66,6 +68,6 @@
         android:src="@android:drawable/ic_input_add"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        android:transitionName="shared_element_container"
         />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

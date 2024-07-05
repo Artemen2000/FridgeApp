@@ -12,6 +12,7 @@ import androidx.room.PrimaryKey
 import com.example.fridgeapp1.FridgeApplication
 import java.time.Instant
 import java.util.Calendar
+import javax.inject.Inject
 
 @Entity
 data class FoodItem(

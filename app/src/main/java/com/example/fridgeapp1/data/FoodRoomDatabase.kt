@@ -8,7 +8,7 @@ import androidx.room.RoomDatabase
 
 @Database(entities = [FoodItem::class], version = 1, exportSchema = false)
 abstract class FoodRoomDatabase : RoomDatabase() {
-    abstract fun foodDao() : FoodDao
+    abstract fun getFoodDao() : FoodDao
 
     companion object{
         @Volatile

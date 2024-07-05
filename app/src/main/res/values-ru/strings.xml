@@ -7,7 +7,7 @@
     <string name="food_name">Продукт</string>
     <string name="expires_at">Истекает</string>
     <string name="enter_food_name">Введите название продукта</string>
-    <string name="expirement_date">Срок годности, дата</string>
+    <string name="expiration_date">Срок годности, дата</string>
     <string name="delete">Удалить</string>
     <string name="confirm_creating">Подтвердить добавление</string>
     <string name="days">Дней</string>

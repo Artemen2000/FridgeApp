@@ -2,26 +2,23 @@ package com.example.fridgeapp1.screen.food_edit
 
 import android.icu.text.DateFormat
 import android.icu.util.Calendar
-import android.text.SpannableStringBuilder
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.asLiveData
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.example.fridgeapp1.data.FoodDao
 import com.example.fridgeapp1.data.FoodItem
 import com.example.fridgeapp1.util.distinctUntilChanged
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.Date
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 import kotlin.NumberFormatException
 
-class EditFoodViewModel(
+class EditFoodViewModel @Inject constructor(
     private val foodDao: FoodDao,
     private val selectedItemId: Int? = null
 ) : ViewModel() {
@@ -40,21 +37,20 @@ class EditFoodViewModel(
     val isEditing = selectedItemId != null && selectedItemId != -1
     private val _navDest = MutableLiveData<EditFoodDestination?>()
     val navDest: LiveData<EditFoodDestination?> = _navDest
-    //private lateinit var observingFood: LiveData<FoodItem>
 
 
     init {
         selectedItemId?.let { id ->
             viewModelScope.launch {
                 foodDao.getItem(id).collect {
-                    _currentName.value = it?.name ?: ""
-                    _currentDate.value = it?.expiresAt ?: System.currentTimeMillis()
+                    _currentName.value = it.name
+                    _currentDate.value = it.expiresAt
                 }
             }
         }
     }
 
-    fun currentTimeDays():Long{
+    private fun currentTimeDays():Long{
         val cal = Calendar.getInstance()
         cal.set(Calendar.MILLISECONDS_IN_DAY, cal.getActualMaximum(Calendar.MILLISECONDS_IN_DAY))
         return cal.timeInMillis
@@ -89,8 +85,8 @@ class EditFoodViewModel(
         }
     }
 
-    fun addNewFood() {
-        viewModelScope.launch(/*Dispatchers.IO*/) {
+    private fun addNewFood() {
+        viewModelScope.launch {
             foodDao.insert(
                 FoodItem(
                     name = currentName.value.orEmpty(),
@@ -101,7 +97,7 @@ class EditFoodViewModel(
         }
     }
 
-    fun updateFood() {
+    private fun updateFood() {
         viewModelScope.launch {
             foodDao.update(
                 FoodItem(
@@ -118,7 +114,7 @@ class EditFoodViewModel(
         if (isEditing) updateFood() else addNewFood()
     }
 
-    fun navigateUp() {
+    private fun navigateUp() {
         _navDest.value = EditFoodDestination.Up
     }
 
@@ -127,22 +123,22 @@ class EditFoodViewModel(
     }
 
     override fun onCleared() {
-        Log.d("goida", "VM cleared")
+        Log.d("FridgeApp", "VM cleared")
         super.onCleared()
-        Log.d("goida", "VM cleared")
+        Log.d("FridgeApp", "VM cleared")
     }
 
 }
 
-class EditFoodViewModelFactory(
-    private val foodDao: FoodDao,
-    private val selectedItemId: Int?
-) : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(EditFoodViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
-            return EditFoodViewModel(foodDao, selectedItemId) as T
-        }
-        throw IllegalArgumentException("Unknown ViewModel class")
-    }
-}
+//class EditFoodViewModelFactory(
+//    private val foodDao: FoodDao,
+//    private val selectedItemId: Int?
+//) : ViewModelProvider.Factory {
+//    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+//        if (modelClass.isAssignableFrom(EditFoodViewModel::class.java)) {
+//            @Suppress("UNCHECKED_CAST")
+//            return EditFoodViewModel(foodDao, selectedItemId) as T
+//        }
+//        throw IllegalArgumentException("Unknown ViewModel class")
+//    }
+//}

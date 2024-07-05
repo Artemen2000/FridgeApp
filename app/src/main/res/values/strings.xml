@@ -6,7 +6,7 @@
     <string name="food_name">Food Name</string>
     <string name="expires_at">Expires at</string>
     <string name="enter_food_name">Enter food name</string>
-    <string name="expirement_date">Expirement date</string>
+    <string name="expiration_date">Expiration date</string>
     <string name="delete">Delete</string>
     <string name="confirm_creating">Confirm creating</string>
     <string name="days">days</string>

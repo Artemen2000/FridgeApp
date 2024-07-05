@@ -36,4 +36,13 @@
 
 
     </fragment>
+
+    <fragment
+        android:id="@+id/deletedFoodListFragment"
+        android:name="com.example.fridgeapp1.screen.deleted_food_list.DeletedFoodListFragment"
+        android:label="Deleted Food"
+        tools:layout="@layout/fragment_deleted_food"
+        >
+
+    </fragment>
 </navigation>
